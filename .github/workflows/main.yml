@@ -35,4 +35,4 @@ jobs:
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push 872755482596.dkr.ecr.us-east-2.amazonaws.com/product-order-api-repo:latest
