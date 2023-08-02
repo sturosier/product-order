@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-order-api-github
+  labels:
+    app: product-order-api-app
+spec:
+  selector:
+    matchLabels:
+      app: product-order-api-app
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: product-order-api-app
+    spec:
+      containers:
+        - name: product-order-api-app
+          image: 872755482596.dkr.ecr.us-east-2.amazonaws.com/product-order-api-repo:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          imagePullPolicy: Always
