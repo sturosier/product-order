@@ -49,7 +49,6 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-        export IMAGE_TAG=$IMAGE_TAG
-        export KUBECONFIG=kubeconfig.yaml
-        #envsubst < k8s/kustomization.tmpl.yaml > k8s/kustomization.yaml
-        kubectl kustomize k8s | kubectl apply -f -
+          export IMAGE_TAG=$IMAGE_TAG
+          export KUBECONFIG=kubeconfig.yaml
+          kubectl kustomize k8s | kubectl apply -f -
