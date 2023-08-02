@@ -7,7 +7,8 @@ env:
   #AWS_REGION: ${{ secrets.AWS_REGION }}
   #KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   KUBE_NAMESPACE: dev
-  #ECR_REPOSITORY: my-cool-application
+  ECR_REPOSITORY: product-order-api-repo
+  IMAGE_TAG: latest
   #SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 permissions:
   id-token: write
@@ -40,13 +41,15 @@ jobs:
       id: Build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: product-order-api-repo
-        IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Deploy to Kubernetes cluster
-      run: |
-        kubectl apply -f eks/deployment.yml
-        kubectl apply -f eks/service.yml
+    - name: Deploy
+        env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+        export IMAGE_TAG=$IMAGE_TAG
+        export KUBECONFIG=kubeconfig.yaml
+        #envsubst < k8s/kustomization.tmpl.yaml > k8s/kustomization.yaml
+        kubectl kustomize k8s | kubectl apply -f -

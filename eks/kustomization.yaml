@@ -1,0 +1,8 @@
+resources:
+  - deployment.yml
+  - service.yml
+
+images:
+  - name: 872755482596.dkr.ecr.us-east-2.amazonaws.com/product-order-api-repo
+    newName: ${ECR_REPOSITORY}
+    newTag: ${IMAGE_TAG}
