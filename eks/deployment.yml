@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-order-api
+  labels:
+    app: product-order-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-order-api
+  template:
+    metadata:
+      labels:
+        app: product-order-api
+    spec:
+      containers:
+        - name: product-order-api
+          imagePullPolicy: IfNotPresent
+          image: 872755482596.dkr.ecr.us-east-2.amazonaws.com/product-order-api-repo:latest

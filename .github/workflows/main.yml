@@ -48,7 +48,6 @@ jobs:
 
     - name: Deploy to Kubernetes cluster
       uses: kodermax/kubectl-aws-eks@master
-      env:
-        RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/product-order-api-repo:latest
-      with:
-        args: set image deployment/my-pod app=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE
+      run: |
+        kubectl apply -f eks/deployment.yml
+        kubectl apply -f eks/service.yml
