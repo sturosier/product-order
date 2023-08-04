@@ -58,10 +58,10 @@ jobs:
         sudo mv kubectl /usr/local/bin/
         echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
 
-    - name: apply with envsubst
+    - name: deploy to cluster
       uses: neosec-com/kubectl-aws-eks@1.1.4
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
-        args: envsubst < eks/deployment.yml | kubectl apply -f -
+        args: kubectl set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
