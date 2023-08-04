@@ -8,7 +8,7 @@ env:
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
   KUBE_NAMESPACE: dev
   ECR_REPOSITORY: product-order-api-repo
-  IMAGE_TAG: latest
+  IMAGE_TAG: ${{ github.sha }}
   #SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   #envsubst < k8s/kustomization.tmpl.yaml > k8s/kustomization.yaml
 
@@ -58,13 +58,15 @@ jobs:
         sudo mv kubectl /usr/local/bin/
         echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
 
-    - name: Deploy
+    - name: apply with envsubst
+      uses: neosec-com/kubectl-aws-eks@1.1.2
+      with:
+        args: envsubst < eks/deployment.yml | kubectl apply -f -
+
+    - name: Install release
+      uses: neosec-com/kubectl-aws-eks@1.1.3-helm
       env:
-        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      run: |
-        mkdir ${HOME}/.kube
-        echo $KUBE_CONFIG | base64 --decode > ${HOME}/.kube/config
-        cat ${HOME}/.kube/config
-        export ECR_REPOSITORY=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
-        kubectl kustomize eks | kubectl apply -f -
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      with:
+        args: helm install my-release charts/my-chart
+

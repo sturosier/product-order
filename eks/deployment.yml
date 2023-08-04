@@ -17,4 +17,4 @@ spec:
       containers:
         - name: product-order-api
           imagePullPolicy: IfNotPresent
-          image: 872755482596.dkr.ecr.us-east-2.amazonaws.com/product-order-api-repo:latest
+          image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
