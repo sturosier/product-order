@@ -59,7 +59,7 @@ jobs:
         echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
 
     - name: apply with envsubst
-      uses: neosec-com/kubectl-aws-eks@1.1.2
+      uses: neosec-com/kubectl-aws-eks@1.1.4
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
