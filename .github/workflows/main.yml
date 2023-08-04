@@ -58,3 +58,4 @@ jobs:
     - name: Deploy to EKS
       run: |
         envsubst < eks/deployment.yml | kubectl apply -f -
+        kubectl apply -f eks/service.yml
